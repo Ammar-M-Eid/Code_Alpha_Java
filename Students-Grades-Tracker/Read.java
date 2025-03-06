@@ -1,8 +1,8 @@
 
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class Read {
@@ -31,12 +31,12 @@ public class Read {
         String path= sc.nextLine();
         try {
             File myObj = new File(path);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                Double grade = myReader.nextDouble();
-                Grades.add(grade);
+            try (Scanner myReader = new Scanner(myObj)) {
+                while (myReader.hasNextLine()) {
+                    Double grade = myReader.nextDouble();
+                    Grades.add(grade);
+                }
             }
-            myReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("No such file Name");
         }
