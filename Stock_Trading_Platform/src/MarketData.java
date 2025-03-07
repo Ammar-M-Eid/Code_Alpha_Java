@@ -6,18 +6,17 @@ import java.util.Scanner;
 
 public class MarketData {
 
-    ArrayList<String[]> Market = new ArrayList<>(); 
+    ArrayList<String[]> Market = new ArrayList<>();
 
     public void clearMarket() {
         Market.clear();
     }
 
-
     public void readFromFile() {
-        String path = "C:\\Users\\AMMAR MA. EID\\Documents\\MyGitHub\\Code_Alpha_Java\\CodeAlpha_Stock-Trading-Platform\\market_data";
-        clearMarket(); 
+        String path = "C:\\Users\\AMMAR MA. EID\\Documents\\MyGitHub\\Code_Alpha_Java\\Stock_Trading_Platform\\src\\market_data";
+        clearMarket();
         try {
-            File myObj = new File(path); 
+            File myObj = new File(path);
 
             try (Scanner myReader = new Scanner(myObj)) {
                 while (myReader.hasNextLine()) {

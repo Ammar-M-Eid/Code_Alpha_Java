@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class Main {
+public class App {
 
     public static void main(String[] args) {
         MarketData market = new MarketData();
