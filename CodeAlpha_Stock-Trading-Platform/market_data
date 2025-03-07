@@ -1,2 +1,5 @@
-name,price,daily change
-apple,2400,23
+AAPL,2400,23
+GOOGL,2800,15
+MSFT,3100,10
+AMZN,3300,20
+TSLA,700,30

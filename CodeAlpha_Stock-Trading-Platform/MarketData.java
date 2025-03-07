@@ -1,36 +1,47 @@
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class MarketData {
-    ArrayList<String[]> Market =new ArrayList<>();
-    public void readFromFile(){
-        /*System.out.println("Enter the file path");
-        Scanner sc =new Scanner(System.in);*/
-        String path= "C:\\Users\\AMMAR MA. EID\\Documents\\MyGitHub\\CodeAlpha_Stock-Trading-Platform\\src\\market_data";
+
+    ArrayList<String[]> Market = new ArrayList<>();
+
+    public void readFromFile() {
+        String path = "C:\\Users\\AMMAR MA. EID\\Documents\\MyGitHub\\Code_Alpha_Java\\CodeAlpha_Stock-Trading-Platform\\market_data";
         try {
             File myObj = new File(path);
             try (Scanner myReader = new Scanner(myObj)) {
                 while (myReader.hasNextLine()) {
-                    String line= myReader.nextLine();
+                    String line = myReader.nextLine();
                     String[] stock;
-                    stock= line.split(",");
+                    stock = line.split(",");
                     Market.add(stock);
                 }
             }
         } catch (FileNotFoundException e) {
             System.out.println("No such file Name");
         }
-
     }
+
     public String printMarket() {
-        readFromFile();
-        StringBuilder string = new StringBuilder();
-        for (String[] s:Market) {
-            string.append(Arrays.toString(s)).append("\n");
+        StringBuilder marketData = new StringBuilder("Market Data:\n");
+        for (String[] stock : Market) {
+            marketData.append("Symbol: ").append(stock[0])
+                    .append(", Price: ").append(stock[1])
+                    .append(", Volume: ").append(stock[2])
+                    .append("\n");
         }
-        return string.toString();
+        return marketData.toString();
+    }
+
+    public double getPrice(String symbol) {
+        for (String[] stock : Market) {
+            if (stock[0].equals(symbol)) {
+                return Double.parseDouble(stock[1]);
+            }
+        }
+        return 0;
     }
 }
