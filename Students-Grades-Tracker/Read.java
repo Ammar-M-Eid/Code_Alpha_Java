@@ -2,39 +2,38 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-
 
 public class Read {
 
-    private static  ArrayList<Double> Grades = new ArrayList<>();
-    public static void readFromUser(){
+    private static ArrayList<Double> grades = new ArrayList<>();
+
+    public static void readFromUser() {
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number of students");
         int n = sc.nextInt();
         sc.nextLine();
         for (int i = 0; i < n; i++) {
-            System.out.println("Enter the grade of student " + (i+1));
+            System.out.println("Enter the grade of student " + (i + 1));
             double grade = sc.nextDouble();
-            Grades.add(grade);
+            grades.add(grade);
         }
-
 
     }
 
-
-    public static void readFromFile(){
+    public static void readFromFile() {
         System.out.println("Enter the file path");
 
-        Scanner sc =new Scanner(System.in);
-        String path= sc.nextLine();
+        Scanner sc = new Scanner(System.in);
+        String path = sc.nextLine();
         try {
             File myObj = new File(path);
             try (Scanner myReader = new Scanner(myObj)) {
                 while (myReader.hasNextLine()) {
                     Double grade = myReader.nextDouble();
-                    Grades.add(grade);
+                    grades.add(grade);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -43,8 +42,11 @@ public class Read {
 
     }
 
+    public static void addGrade(double grade) {
+        grades.add(grade);
+    }
 
     public static ArrayList<Double> getGrades() {
-        return Grades;
+        return grades;
     }
 }

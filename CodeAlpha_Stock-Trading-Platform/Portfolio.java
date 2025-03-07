@@ -9,6 +9,15 @@ public class Portfolio {
         holdings.add(new String[]{symbol, String.valueOf(quantity), String.valueOf(price)});
     }
 
+    public boolean hasHolding(String symbol) {
+        for (String[] holding : holdings) {
+            if (holding[0].equals(symbol)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void removeHolding(String symbol, int quantity) {
         for (int i = 0; i < holdings.size(); i++) {
             String[] holding = holdings.get(i);

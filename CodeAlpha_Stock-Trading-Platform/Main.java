@@ -1,5 +1,5 @@
-
-import java.util.Scanner;
+import java.awt.*;
+import javax.swing.*;
 
 public class Main {
 
@@ -7,54 +7,91 @@ public class Main {
         MarketData market = new MarketData();
         Portfolio portfolio = new Portfolio();
         Transaction transactions = new Transaction();
-        try (Scanner scanner = new Scanner(System.in)) {
-            boolean running = true;
 
-            market.readFromFile();
+        market.readFromFile();
 
-            while (running) {
-                System.out.println("Welcome to the Stock Trading Platform");
-                System.out.println("1. View Market Data");
-                System.out.println("2. View Portfolio");
-                System.out.println("3. View Transactions");
-                System.out.println("4. Buy Stock");
-                System.out.println("5. Sell Stock");
-                System.out.println("6. Exit");
-                System.out.print("Please select an option: ");
+        JFrame frame = new JFrame("Stock Trading Platform");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLayout(new BorderLayout());
 
-                int choice = scanner.nextInt();
-                scanner.nextLine();
-                switch (choice) {
-                    case 1 ->
-                        System.out.println(market.printMarket());
-                    case 2 ->
-                        System.out.println(portfolio.printPortfolio());
-                    case 3 ->
-                        System.out.println(transactions.printTransactions());
-                    case 4 -> {
-                        System.out.print("Enter stock symbol: ");
-                        String buySymbol = scanner.nextLine();
-                        System.out.print("Enter quantity: ");
-                        int buyQuantity = scanner.nextInt();
-                        double buyPrice = market.getPrice(buySymbol); 
-                        portfolio.addHolding(buySymbol, buyQuantity, buyPrice);
-                        transactions.addTransaction("Buy", buySymbol, buyQuantity, buyPrice);
-                    }
-                    case 5 -> {
-                        System.out.print("Enter stock symbol: ");
-                        String sellSymbol = scanner.nextLine();
-                        System.out.print("Enter quantity: ");
-                        int sellQuantity = scanner.nextInt();
-                        double sellPrice = market.getPrice(sellSymbol); 
-                        portfolio.removeHolding(sellSymbol, sellQuantity);
-                        transactions.addTransaction("Sell", sellSymbol, sellQuantity, sellPrice);
-                    }
-                    case 6 ->
-                        running = false;
-                    default ->
-                        System.out.println("Invalid option. Please try again.");
-                }
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(6, 1));
+
+        JLabel welcomeLabel = new JLabel("Welcome to Code Alpha Stock Trading Platform", SwingConstants.CENTER);
+        frame.add(welcomeLabel, BorderLayout.NORTH);
+
+        JTextArea marketDataArea = new JTextArea(market.printMarket());
+        marketDataArea.setEditable(false);
+        JScrollPane marketScrollPane = new JScrollPane(marketDataArea);
+        frame.add(marketScrollPane, BorderLayout.CENTER);
+
+        JButton viewPortfolioButton = new JButton("View Portfolio");
+        JButton viewTransactionsButton = new JButton("View Transactions");
+        JButton buyStockButton = new JButton("Buy Stock");
+        JButton sellStockButton = new JButton("Sell Stock");
+        JButton refreshMarketButton = new JButton("Refresh Market Data");
+        JButton exitButton = new JButton("Exit");
+
+        viewPortfolioButton.setBackground(new Color(0x3E5879)); 
+        viewPortfolioButton.setForeground(new Color(0xF5EFE7)); 
+        viewTransactionsButton.setBackground(new Color(0x3E5879));
+        viewTransactionsButton.setForeground(new Color(0xF5EFE7));
+        buyStockButton.setBackground(new Color(0x3E5879));
+        buyStockButton.setForeground(new Color(0xF5EFE7));
+        sellStockButton.setBackground(new Color(0x3E5879));
+        sellStockButton.setForeground(new Color(0xF5EFE7));
+        refreshMarketButton.setBackground(new Color(0x3E5879));
+        refreshMarketButton.setForeground(new Color(0xF5EFE7));
+        exitButton.setBackground(new Color(0x3E5879));
+        exitButton.setForeground(new Color(0xF5EFE7));
+
+        buttonPanel.add(viewPortfolioButton);
+        buttonPanel.add(viewTransactionsButton);
+        buttonPanel.add(buyStockButton);
+        buttonPanel.add(sellStockButton);
+        buttonPanel.add(refreshMarketButton);
+        buttonPanel.add(exitButton);
+
+        frame.add(buttonPanel, BorderLayout.EAST);
+
+        viewPortfolioButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, portfolio.printPortfolio()));
+        viewTransactionsButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, transactions.printTransactions()));
+
+        buyStockButton.addActionListener(e -> {
+            String buySymbol = JOptionPane.showInputDialog("Enter stock symbol:");
+            String buyQuantityStr = JOptionPane.showInputDialog("Enter quantity:");
+            int buyQuantity = Integer.parseInt(buyQuantityStr);
+            double buyPrice = market.getPrice(buySymbol);
+            if (buyPrice == 0) {
+                JOptionPane.showMessageDialog(frame, "Stock does not exist in the market.");
+                return;
             }
-        }
+            portfolio.addHolding(buySymbol, buyQuantity, buyPrice);
+            transactions.addTransaction("Buy", buySymbol, buyQuantity, buyPrice);
+        });
+
+        sellStockButton.addActionListener(e -> {
+            String sellSymbol = JOptionPane.showInputDialog("Enter stock symbol:");
+            String sellQuantityStr = JOptionPane.showInputDialog("Enter quantity:");
+            int sellQuantity = Integer.parseInt(sellQuantityStr);
+            double sellPrice = market.getPrice(sellSymbol);
+            if (!portfolio.hasHolding(sellSymbol)) {
+                JOptionPane.showMessageDialog(frame, "Stock is not in the portfolio.");
+                return;
+            }
+            portfolio.removeHolding(sellSymbol, sellQuantity);
+            transactions.addTransaction("Sell", sellSymbol, sellQuantity, sellPrice);
+        });
+
+        refreshMarketButton.addActionListener(e -> {
+            market.readFromFile();
+            marketDataArea.setText(""); 
+            marketDataArea.setText(market.printMarket()); 
+        });
+
+        exitButton.addActionListener(e -> System.exit(0));
+
+        frame.setVisible(true);
     }
 }
