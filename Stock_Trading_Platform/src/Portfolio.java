@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Portfolio {
 
-    private ArrayList<String[]> holdings = new ArrayList<>();
+    private final ArrayList<String[]> holdings = new ArrayList<>();
 
     public void addHolding(String symbol, int quantity, double price) {
         holdings.add(new String[]{symbol, String.valueOf(quantity), String.valueOf(price)});
@@ -40,6 +40,9 @@ public class Portfolio {
 
     public String printPortfolio() {
         StringBuilder portfolioData = new StringBuilder("Portfolio Data:\n");
+        if (holdings.isEmpty()) {
+            portfolioData.append("No holdings in the portfolio.\n");
+        }
         for (String[] holding : holdings) {
             portfolioData.append("Symbol: ").append(holding[0])
                     .append(", Quantity: ").append(holding[1])

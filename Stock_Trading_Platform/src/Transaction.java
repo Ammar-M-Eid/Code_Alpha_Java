@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Transaction {
 
-    private ArrayList<String[]> transactions = new ArrayList<>();
+    private final ArrayList<String[]> transactions = new ArrayList<>();
 
     public void addTransaction(String type, String symbol, int quantity, double price) {
         transactions.add(new String[]{type, symbol, String.valueOf(quantity), String.valueOf(price)});
